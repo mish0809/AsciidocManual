@@ -1,0 +1,302 @@
+
+
+:lang: ja
+:doctype: book
+:toc: left
+:toclevels: 3
+:toc-title: 目次
+:sectnums:
+:sectnumlevels: 4
+:sectlinks:
+:imagesdir: images
+:icons: font
+:source-highlighter: coderay
+:example-caption: 例
+:table-caption: 表
+:figure-caption: 図
+:docname: = asciidocの使い方
+:author: shun miyamoto
+:revnumber: 0.1
+:revdate: 2017/10/25
+:stylesdir: stylesheets/
+:stylesheet: asciidoctor.css
+
+= Asciidoc Manual
+== 環境構築
+=== PDFプレビュー
+vscode-pdf - Visual Studio Marketplace 
+https://marketplace.visualstudio.com/items?itemName=tomoki1207.pdf
+
+=== HTMLプレビュー
+HTML Preview - Visual Studio Marketplace 
+https://marketplace.visualstudio.com/items?itemName=george-alisson.html-preview-vscode
+
+=== PlantUML
+
+以下の図がプレビュー画面に表示されていることを確認する。
+.クラス図
+[plantuml]
+----
+class Animal {
+  int age
+  run()
+}
+
+class Cat extends Animal {
+}
+
+class Dog extends Animal {
+}
+----
+
+上記の図がPDF出力とHTML出力で出力されることを確認する。
+
+=== mermaid
+
+Asciidocの導入 - BLOG - siwa32.com 
+https://blog.siwa32.com/asciidoc/#_plantuml%E3%82%84mermaid%E3%81%AA%E3%81%A9%E3%81%AE%E5%9B%B3%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B
+
+AsciiDoc と PlantUML と mermaid.js で素敵なテキストベース仕様書ライフ 
+https://ryuta46.com/112
+
+mermaid - Markdownish syntax for generating flowcharts, sequence diagrams, class diagrams, gantt charts and git graphs. 
+https://mermaid-js.github.io/mermaid/#/
+
+以下の図がプレビュー画面に表示されていることを確認する。
+[mermaid]
+....
+graph LR;
+    AsciiDocテキスト -- asciidocotor-pdf --> PDF仕様書;
+    PlantUMLテキスト -- PlantUML --> png画像;
+    png画像 -- asciidoctor-pdf --> PDF仕様書;
+....
+
+[mermaid,"generated/full-size","png"]
+....
+gantt
+A1 :2016-12-16, 1d
+B2 :2m
+B3 :1d
+B4 :1d
+B5 :1d
+B6 :1d
+B7 :1d
+B8 :1d
+....
+
+上記の図がPDF出力とHTML出力で出力されることを確認する。
+
+=== PasteImage
+=== Asciidoctor Stylesheet Factory
+
+https://github.com/asciidoctor/asciidoctor-stylesheet-factory
+
+==== Build the default stylesheet
+
+==== Build the other stylesheets
+
+==== Create sample documents
+
+== HTMLファイル変換
+
+asciidoctor AsciidocManual.adoc
+複数ファイルまとめて変換
+asciidoctor *.adoc 
+
+CSS適用してHTML出力
+asciidoctor -a stylesheet=css/boot-slate.css AsciidocManual.adoc
+
+asciidoctor-pdf-cjk や asciidoctor-diagramを使う場合(-rをつける)
+asciidoctor -r asciidoctor-pdf-cjk -r asciidoctor-diagram AsciidocManual.adoc
+
+== PDFファイル変換
+
+asciidoctor-pdf test.adoc
+複数ファイルまとめて変換
+asciidoctor-pdf *.adoc
+asciidoctor-pdf-cjk や asciidoctor-diagramを使う場合(-rをつける)
+asciidoctor-pdf -r asciidoctor-pdf-cjk -r asciidoctor-diagram test.adoc
+
+== Word(docx)をAsciidocファイルに変換する
+pandoc（外部ツール）を使う.
+pandocをインストールし、パスを通しておく。
+pandoc --from=docx --to=asciidoc --wrap=none --atx-headers --extract-media=extracted-media input.docx > output.adoc
+
+== 目次の作成
+:toc:の後、top left Rightで位置を指定し目次出力 
+:sectnums:でセクションが自動的にナンバリングされる。
+:toc-title:で目次のタイトル名を指定（デフォルトは「Table of Contents」）
+:toclevels:で表示する階層を指定可能（デフォルト2,最大5）
+
+== セクション
+:sectlinks:でセクションに自動的にアンカーがつけられる
+
+== 表の作成
+
+|====
+|列1|列2|列3
+3+|3列結合
+.2+|2行縦結合|b-1|c-2
+|b-2|c-2
+.2+|2行縦+2列結合の組み合わせ 2+|b-3
+|b-4|c-4
+|====
+
+[cols="1,5a"]
+|====
+|No|項目
+|1|対応ブラウザ
+
+* Firefox
+* Chrome
+* edge
+|2| 対応OS
+
+. Windows
+. Linux
+. Mac
+|====
+
+.autowidthあり
+[options="autowidth"]
+|====
+|No|OS
+|1|Windows
+|2|Linux
+|====
+
+.列幅指定なし
+|====
+|No|OS
+|1|Windows
+|2|Linux
+|====
+
+.列幅を比率で指定
+[cols="1,5"]
+|====
+|No|OS
+|1|Windows
+|2|Linux
+|====
+
+== 脚注
+
+アイコンの表示
+[NOTE]
+====
+* デフォルトでは[NOTE]が出ません
+====
+
+[CAUTION]
+====
+* デフォルトでは[CAUTION]が出ません
+====
+
+== Asciidoctor Diagram
+=== PlantUML
+.シーケンス図
+[plantuml, diagram-classes, png]     
+....
+class BlockProcessor
+class DiagramBlock
+class DitaaBlock
+class PlantUmlBlock
+
+BlockProcessor <|-- DiagramBlock
+DiagramBlock <|-- DitaaBlock
+DiagramBlock <|-- PlantUmlBlock
+....
+
+.クラス図
+[plantuml]
+----
+class Animal {
+  int age
+  run()
+}
+
+class Cat extends Animal {
+}
+
+class Dog extends Animal {
+}
+----
+
+=== ditaa
+[ditaa]
+....
+                   +-------------+
+                   | Asciidoctor |-------+
+                   |   diagram   |       |
+                   +-------------+       | PNG out
+                       ^                 |
+                       | ditaa in        |
+                       |                 v
+ +--------+   +--------+----+    /---------------\
+ |        | --+ Asciidoctor +--> |               |
+ |  Text  |   +-------------+    |   nihonngo    |
+ |Document|   |   !magic!   |    |    Output     |
+ |     {d}|   |             |    |               |
+ +---+----+   +-------------+    \---------------/
+     :                                   ^
+     |          Lots of work             |
+     +-----------------------------------+
+....
+
+
+
+
+[mermaid]
+....
+sequenceDiagram
+    participant Alice
+    participant Bob
+    Alice->>John: Hello John, how are you?
+    loop Healthcheck
+        John->>John: Fight against hypochondria
+    end
+    Note right of John: Rational thoughts <br/>prevail!
+    John-->>Alice: Great!
+    John->>Bob: How about you?
+    Bob-->>John: Jolly good!
+....
+
+
+[mermaid,"generated/classDiagram","png"]
+....
+classDiagram
+Class01 <|-- AveryLongClass : Cool
+Class03 *-- Class04
+Class05 o-- Class06
+Class07 .. Class08
+Class09 --> C2 : Where am i?
+Class09 --* C3
+Class09 --|> Class07
+Class07 : equals()
+Class07 : Object[] elementData
+Class01 : size()
+Class01 : int chimp
+Class01 : int gorilla
+Class08 <--> C2: Cool label
+....
+
+
+
+=== 変換方法
+
+$ asciidoctor -r asciidoctor-diagram sample.adoc
+$ asciidoctor -r asciidoctor-diagram -r asciidoctor-epub3 -b epub3 sample.adoc
+$ asciidoctor-epub3 -r asciidoctor-diagram sample.adoc
+
+
+== 画像
+imagedirを起点にした相対パスを指定する。
+
+image::sunset.jpg[]
+
+image::2019-11-04-18-11-16.png[]
+
+
+
+
